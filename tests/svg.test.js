@@ -1,0 +1,1 @@
+import{describe,it,expect}from'vitest';import{parseSvgText}from'../src/utils/svg';describe('svg',()=>it('bereinigt und mappt',()=>{const x=parseSvgText('<svg xmlns="http://www.w3.org/2000/svg"><script>x</script><path d="M0 0h1v1z"/></svg>');expect(x).not.toContain('<script');expect(x).toContain('data-region-id')}));
