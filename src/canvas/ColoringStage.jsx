@@ -57,7 +57,6 @@ export default function ColoringStage({ onNeedGallery }) {
   const lineArtInner = useMemo(() => createLineArtMarkup(markup), [markup]);
   const viewBox = useMemo(() => getSvgViewBox(markup), [markup]);
 
-  // Bild wechseln -> Canvas leeren, gespeicherten Stand laden
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -79,7 +78,6 @@ export default function ColoringStage({ onNeedGallery }) {
     }
   }, [s.template?.id]);
 
-  // Fläche einfärben -> nur das betroffene DOM-Element aktualisieren
   useEffect(() => {
     const root = document.querySelector('.regions');
     if (!root) return;
@@ -89,7 +87,6 @@ export default function ColoringStage({ onNeedGallery }) {
     });
   }, [s.fills, s.template?.id]);
 
-  // Undo/Redo -> Malebene aus Snapshot wiederherstellen
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -102,7 +99,6 @@ export default function ColoringStage({ onNeedGallery }) {
     }
   }, [s.paintSnapshot]);
 
-  // Autosave
   useEffect(() => {
     if (!s.template) return undefined;
     const t = setTimeout(() => {

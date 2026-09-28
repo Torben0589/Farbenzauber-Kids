@@ -98,13 +98,6 @@ export default function Gallery({ open, onClose, onPick }) {
           ))}
         </div>
 
-        {/*
-          Wichtig: Dieser Block liegt bewusst AUSSERHALB von .gallery,
-          damit CSS-Grid ihn niemals als weitere Kachel behandelt.
-          .modal ist ein Flex-Container (flex-direction: column),
-          daher nimmt dieser Wrapper automatisch die volle Breite ein
-          und wird sauber UNTER der Galerie angezeigt.
-        */}
         <div className="upload-wrapper">
           <label className="upload">
             <Upload />
