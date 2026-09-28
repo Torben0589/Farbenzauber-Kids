@@ -1,26 +1,29 @@
 {
   "name": "farbenzauber-kids",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^5.0.4",
-    "dompurify": "^3.2.6",
-    "lucide-react": "^0.544.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "vite": "^7.1.7",
-    "vite-plugin-pwa": "^1.0.3",
-    "zustand": "^5.0.8"
+    "@vitejs/plugin-react": "latest",
+    "dompurify": "latest",
+    "lucide-react": "latest",
+    "vite": "latest",
+    "vite-plugin-pwa": "latest",
+    "zustand": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   },
   "devDependencies": {
-    "jsdom": "^27.0.0",
-    "vitest": "^3.2.4"
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
+    "jsdom": "latest",
+    "vitest": "latest"
   }
 }

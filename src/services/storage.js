@@ -1,1 +1,28 @@
-const KEY='farbenzauber-v1';export function saveProject(id,p){try{const a=JSON.parse(localStorage.getItem(KEY)||'{}');a[id]={...p,savedAt:Date.now()};localStorage.setItem(KEY,JSON.stringify(a))}catch(e){console.warn(e)}}export function loadProject(id){try{return JSON.parse(localStorage.getItem(KEY)||'{}')[id]||null}catch{return null}}export const favorites=()=>JSON.parse(localStorage.getItem('farbenzauber-favs')||'[]');export function toggleFavorite(id){const s=new Set(favorites());s.has(id)?s.delete(id):s.add(id);const a=[...s];localStorage.setItem('farbenzauber-favs',JSON.stringify(a));return a}
+const KEY = 'farbenzauber-v1';
+
+export const saveProject = (id, payload) => {
+  try {
+    const all = JSON.parse(localStorage.getItem(KEY) || '{}');
+    all[id] = { ...payload, savedAt: Date.now() };
+    localStorage.setItem(KEY, JSON.stringify(all));
+  } catch (e) {
+    console.warn('Autosave fehlgeschlagen', e);
+  }
+};
+
+export const loadProject = (id) => {
+  try {
+    return JSON.parse(localStorage.getItem(KEY) || '{}')[id] || null;
+  } catch {
+    return null;
+  }
+};
+
+export const favorites = () => JSON.parse(localStorage.getItem('farbenzauber-favs') || '[]');
+
+export const toggleFavorite = (id) => {
+  const f = new Set(favorites());
+  f.has(id) ? f.delete(id) : f.add(id);
+  localStorage.setItem('farbenzauber-favs', JSON.stringify([...f]));
+  return [...f];
+};

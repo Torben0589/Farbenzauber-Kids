@@ -1,1 +1,89 @@
-import{useEffect,useState}from'react';import{Download,ImagePlus,Moon,Sun}from'lucide-react';import Toolbar from'./components/Toolbar';import Palette from'./components/Palette';import Gallery from'./components/Gallery';import ColoringStage from'./canvas/ColoringStage';import{useApp}from'./store';import{exportSvg}from'./utils/svg';export default function App(){const s=useApp(),[gallery,setGallery]=useState(true);useEffect(()=>document.documentElement.classList.toggle('dark',s.dark),[s.dark]);async function pick(x){if(x.type==='svg'&&!x.markup)x={...x,markup:await fetch(`${import.meta.env.BASE_URL}${x.file}`).then(r=>r.text())};s.openTemplate(x);setGallery(false)}function dl(b,n){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}function save(){if(!s.template)return;if(s.template.type==='svg')return dl(new Blob([exportSvg(s.template.markup,s.fills)],{type:'image/svg+xml'}),`${s.template.id}.svg`);const c=document.createElement('canvas');c.width=c.height=900;const x=c.getContext('2d'),p=document.querySelector('.paint-canvas'),l=document.querySelector('.raster-line');x.fillStyle='#fff';x.fillRect(0,0,900,900);x.drawImage(p,0,0,900,900);if(l)x.drawImage(l,0,0,900,900);c.toBlob(b=>dl(b,`${s.template.id}.png`))}return <div className="app"><header className="topbar"><div className="brand"><b>🎨</b><span>Farbenzauber Kids</span></div><div className="top-actions"><button className="icon-btn" onClick={()=>setGallery(true)}><ImagePlus/><span>Galerie</span></button><button className="icon-btn" onClick={save}><Download/><span>Export</span></button><button className="icon-btn" onClick={s.toggleDark}>{s.dark?<Sun/>:<Moon/>}</button></div></header><div className="layout"><Toolbar/><ColoringStage onNeedGallery={()=>setGallery(true)}/><Palette/></div><Gallery open={gallery} onClose={()=>setGallery(false)} onPick={pick}/></div>}
+import { useEffect, useState } from 'react';
+import { Download, ImagePlus, Moon, Sun } from 'lucide-react';
+import Toolbar from './components/Toolbar';
+import Palette from './components/Palette';
+import Gallery from './components/Gallery';
+import ColoringStage from './canvas/ColoringStage';
+import { useApp } from './store';
+import { exportSvg } from './utils/svg';
+
+export default function App() {
+  const s = useApp();
+  const [gallery, setGallery] = useState(true);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', s.dark);
+  }, [s.dark]);
+
+  async function pick(item) {
+    let next = item;
+    if (item.type === 'svg' && !item.markup) {
+      const markup = await fetch(`${import.meta.env.BASE_URL}${item.file}`).then((r) => r.text());
+      next = { ...item, markup };
+    }
+    s.openTemplate(next);
+    setGallery(false);
+  }
+
+  function download(blob, name) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  function save() {
+    if (!s.template) return;
+
+    if (s.template.type === 'svg') {
+      download(new Blob([exportSvg(s.template.markup, s.fills)], { type: 'image/svg+xml' }), `${s.template.id}.svg`);
+      return;
+    }
+
+    const art = document.querySelector('.paint-canvas');
+    const line = document.querySelector('.raster-line');
+    const out = document.createElement('canvas');
+    out.width = 900;
+    out.height = 900;
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, 900, 900);
+    ctx.drawImage(art, 0, 0, 900, 900);
+    if (line) ctx.drawImage(line, 0, 0, 900, 900);
+    out.toBlob((b) => download(b, `${s.template.id}.png`), 'image/png');
+  }
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div className="brand">
+          <div className="brand-badge">🎨</div>
+          <span>Farbenzauber Kids</span>
+        </div>
+
+        <div className="top-actions">
+          <button className="icon-btn" onClick={() => setGallery(true)}>
+            <ImagePlus />
+            <span className="label">Galerie</span>
+          </button>
+          <button className="icon-btn" onClick={save} disabled={!s.template}>
+            <Download />
+            <span className="label">Export</span>
+          </button>
+          <button className="icon-btn" onClick={s.toggleDark} aria-label="Design umschalten">
+            {s.dark ? <Sun /> : <Moon />}
+          </button>
+        </div>
+      </header>
+
+      <div className="layout">
+        <Toolbar />
+        <ColoringStage onNeedGallery={() => setGallery(true)} />
+        <Palette />
+      </div>
+
+      <Gallery open={gallery} onClose={() => setGallery(false)} onPick={pick} />
+    </div>
+  );
+}
